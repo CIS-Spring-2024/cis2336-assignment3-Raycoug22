@@ -1,0 +1,141 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    max-width: 800px;
+    margin: 20px auto;
+    text-align: center;
+}
+
+h1 {
+    color: #333;
+}
+
+.menu-item {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    margin: 30px;
+    background-color: #f9f9f9;
+    border-color: aqua;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.bar {
+    height: 80px;
+    width: 100%;
+    background: rgba(0,0,0,0.4);
+    margin: 0%;
+}
+
+.logo {
+    max-width: 130px; 
+    height: auto;
+    padding: 20px; 
+    margin-right: auto; 
+    margin-left: 20px; 
+    width: 700px;
+}
+
+.bar ul {
+    float: right;
+    margin-right: 20px;
+}
+
+.bar ul li {
+    list-style: none;
+    margin: 0 8px;
+    display: inline-block;
+    line-height: 80px;
+}
+
+.bar ul li a {
+    text-decoration: none;
+    color: white;
+    font-size: 20px;
+    padding: 6px 13px;
+    font-family: 'Roboto', sans-serif;
+    transition: .4s;
+}
+
+.bar ul li a.active,
+.bar ul li a:hover {
+    background: red;
+    border-radius: 2px;
+}
+
+.cart-icon img {
+    width: 20px; /* Adjust as needed */
+    height: 20px; /* Adjust as needed */
+    vertical-align: middle;
+}
+h1{
+    text-align: center;
+    color: #100110;
+    margin-top: 50pt;
+}
+
+.menu-items {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+}
+body {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    background-image: url(../Images/Buffet.jpg); 
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed; 
+}
+img{
+    width: 100%;
+    height: 150px; /* Adjust height as needed */
+    border-radius: 5px 5px 0 0;
+}
+button{
+    background-color: lightblue;
+    border-radius: 60px 60px 60px 60px;
+    cursor: pointer;
+}
+button:hover{
+    background-color: aquamarine;
+    transition: .15s;
+}
+.para{
+    font-size: 12pt;
+    font-style: oblique;
+    color: blue;
+    margin-top: 110pt;
+}
+h2{
+    margin-right: -380pt;
+    margin-bottom: 200pt;
+}
+.head{
+    font-size: 48pt;
+    color: purple;
+}
+
+#cart-icon img {
+    width: 24px; /* Adjust the width of the image */
+    height: 24px; /* Adjust the height of the image */
+    margin-right: 5px; /* Optional: Adjust the spacing between the image and the text */
+}
+
+#cart-icon:hover{
+    background: red;
+    transition: .5s;
+}
+#cart-icon{
+    float: right;
+    margin-right: -440px;
+}
