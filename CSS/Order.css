@@ -1,0 +1,9 @@
+.btn{
+    border-radius: 25px 25px 25px 25px;
+    background-color: aquamarine;
+}
+.btn:hover{
+    background-color: brown;
+    transition: .5s;
+    cursor: pointer;
+}

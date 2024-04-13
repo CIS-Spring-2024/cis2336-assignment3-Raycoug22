@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping Cart</title>
+    <link rel="stylesheet" href="../CSS/Order.css">
+</head>
+<body>
+    <h1>Shopping Cart</h1>
+    <ul id="cart-items-list">
+        <!-- Cart items will be dynamically added here -->
+    </ul>
+    <button onclick="window.location.href = 'Menu.html';" class="btn">Back to Menu</button>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Retrieve cart data from localStorage
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+            // Render cart content
+            const cartItemsList = document.getElementById('cart-items-list');
+            cartItemsList.innerHTML = ''; // Clear previous content
+            
+            let totalCost = 0;
+
+            cart.forEach(item => {
+                const cartItemElement = document.createElement('li');
+                cartItemElement.textContent = `${item.name} - ${item.price}`;
+                cartItemsList.appendChild(cartItemElement);
+                
+                // Add item price to total cost
+                totalCost += parseFloat(item.price.replace('$', ''));
+            });
+
+            // Display total cost at the bottom of the shopping cart
+            const totalElement = document.createElement('li');
+            totalElement.textContent = `Total Cost: $${totalCost.toFixed(2)}`;
+            cartItemsList.appendChild(totalElement);
+        });
+    </script>
+</body>
+</html>

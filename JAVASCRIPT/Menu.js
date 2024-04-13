@@ -73,48 +73,72 @@ document.addEventListener('DOMContentLoaded', function() {
         addButton.addEventListener('click', () => addToCart(item));
         menuItem.appendChild(addButton);
 
+        const addButton1 = document.createElement('button');
+        addButton1.textContent = 'Remove from Cart';
+        addButton1.addEventListener('click', () => removeFromCart(item));
+        menuItem.appendChild(addButton1);
+
+        const quantityInputLabel = document.createElement('label');
+        quantityInputLabel.textContent = 'Enter item quantity:';
+        menuItem.appendChild(quantityInputLabel);
+
+        const quantityInput = document.createElement('input');
+        quantityInput.type = 'number';
+        quantityInput.min = 0; // Set minimum value to 1
+        menuItem.appendChild(quantityInput);
+
+
         // Append the menu item to the menu container
         menuContainer.appendChild(menuItem);
 
        
     });
+    
+    function addToCart(item, quantityInput) {
+        const menuItem = menuItems
+        const quantity = parseInt(quantityInput.value);
+        if (quantity > 0) {
+            const cartItem = {
+                name: item.name,
+                description: item.description,
+                price: item.price,
+                quantity: quantity
+            };
+            addButton.addEventListener('click', () => {
+                const quantityInput = menuItem.querySelector('input[type="number"]');
+                addToCart(item, quantityInput);
+            });
+            alert(`Added ${quantity} ${item.name} for $${(item.price.replace('$', '') * quantity).toFixed(2)} to cart!`);
 
-    function addToCart(item) {
-        // Create a cart item object
-        const cartItem = {
-            name: item.name,
-            description: item.description,
-            price: item.price
-        };
-
-        
-
-        // Add the cart item to the cart array
-        cart.push(cartItem);
-
-        // Optionally, you can display a message indicating the item has been added to the cart
-        alert(`Added ${item.name} for ${item.price} to cart!`);
-
-        // Optionally, you can update the UI to reflect the addition of the item to the cart
-        // For example, you could display the cart contents somewhere on the webpage
-        updateCartUI();
+            updateCart(cartItem);
+        } else {
+            alert('Please enter a valid quantity greater than zero.');
+        }
     }
 
     function updateCartUI() {
         cartItemCountSpan.textContent = cart.length;
         cartItemsList.innerHTML = '';
-
+        let totalCost = 0;
         cart.forEach(item => {
             const cartItemElement = document.createElement('li');
             cartItemElement.textContent = `${item.name} - ${item.price}`;
             cartItemsList.appendChild(cartItemElement);
+            totalCost += parseFloat(item.price.replace('$', ''));
         });
+
+        const totalElement = document.createElement('li');
+        totalElement.textContent = `Total Cost: $${totalCost.toFixed(2)}`;
+        cartItemsList.appendChild(totalElement);
     }
 
-    function updateCartCount(){
-        const cartItemCount = document.getElementById('cart-item-count');
-        if (cartItemCount) {
-            cartItemCount.textContent = cart.length;
+    function removeFromCart(itemToRemove) {
+        const indexToRemove = cart.findIndex(item => item.name === itemToRemove.name);
+        if (indexToRemove !== -1) {
+            cart.splice(indexToRemove, 1); // Remove item from cart array
+            alert(`${itemToRemove.name} removed from cart!`);
+            updateCartUI(); // Update UI after removing item
+            localStorage.setItem('cart', JSON.stringify(cart)); // Update localStorage
         }
     }
 });
