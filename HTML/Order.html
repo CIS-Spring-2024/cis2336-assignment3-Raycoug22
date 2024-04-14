@@ -8,35 +8,83 @@
 </head>
 <body>
     <h1>Shopping Cart</h1>
+    <button onclick="window.location.href = 'Menu.html';" class="btn">Back to Menu</button>
     <ul id="cart-items-list">
         <!-- Cart items will be dynamically added here -->
     </ul>
-    <button onclick="window.location.href = 'Menu.html';" class="btn">Back to Menu</button>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Retrieve cart data from localStorage
-            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+    const orderItemsList = document.getElementById('cart-items-list');
+    const cart = JSON.parse(localStorage.getItem('cart')) || [];
 
-            // Render cart content
-            const cartItemsList = document.getElementById('cart-items-list');
-            cartItemsList.innerHTML = ''; // Clear previous content
-            
-            let totalCost = 0;
-
-            cart.forEach(item => {
-                const cartItemElement = document.createElement('li');
-                cartItemElement.textContent = `${item.name} - ${item.price}`;
-                cartItemsList.appendChild(cartItemElement);
+    function updateCartUI() {
+                // Clear the order items list
+                orderItemsList.innerHTML = '';
                 
-                // Add item price to total cost
-                totalCost += parseFloat(item.price.replace('$', ''));
-            });
+                let totalCost = 0;
 
-            // Display total cost at the bottom of the shopping cart
-            const totalElement = document.createElement('li');
-            totalElement.textContent = `Total Cost: $${totalCost.toFixed(2)}`;
-            cartItemsList.appendChild(totalElement);
+                // Iterate over each item in the cart
+                cart.forEach(item => {
+                    const orderItemElement = document.createElement('li');
+                    orderItemElement.classList.add('order-item');
+                }
+    });
+
+    function removeFromCart(itemToRemove) {
+        const indexToRemove = cart.findIndex(item => item.name === itemToRemove.name);
+        if (indexToRemove !== -1) {
+            cart.splice(indexToRemove, 1); // Remove item from cart array
+            alert(`${itemToRemove.name} removed from cart!`);
+            updateCartUI(); // Update UI after removing item
+            localStorage.setItem('cart', JSON.stringify(cart)); // Update localStorage
+        }
+    }
+
+    function displayOrderItems() {
+        // Clear the order items list
+        const cart = JSON.parse(localStorage.getItem('cart'));
+        orderItemsList.innerHTML = '';
+
+        let totalCost = 0;
+
+        // Iterate over each item in the cart
+        cart.forEach(item => {
+            const orderItemElement = document.createElement('li');
+            orderItemElement.classList.add('order-item');
+            
+            // Calculate the total price for the item based on its quantity
+            const totalPriceForItem = parseFloat(item.price.replace('$', '')) * item.quantity;
+
+            // Display the item name, quantity, and total price in the order page
+            orderItemElement.textContent = `${item.name} - Quantity: ${item.quantity} - Total: $${totalPriceForItem.toFixed(2)}`;
+
+            const removeButton = document.createElement('button');
+            removeButton.classList.add('btn');
+            removeButton.textContent = 'Remove from Cart';
+            removeButton.addEventListener('click', () => {
+            removeFromCart(item);
+            displayOrderItems(); // Refresh the order items list after removal
         });
+           orderItemElement.appendChild(removeButton);
+            
+            // Append the order item element to the order items list
+            orderItemsList.appendChild(orderItemElement);
+
+            // Add the total price for the item to the overall total cost
+            totalCost += totalPriceForItem;
+        });
+
+        // Display the total cost of all items in the cart on the order page
+        const totalElement = document.createElement('li');
+        totalElement.textContent = `Total Cost: $${totalCost.toFixed(2)}`;
+        orderItemsList.appendChild(totalElement);
+    }
+
+    // Call the displayOrderItems function to initially display the order items
+    displayOrderItems();
+});
+
+       
     </script>
 </body>
 </html>

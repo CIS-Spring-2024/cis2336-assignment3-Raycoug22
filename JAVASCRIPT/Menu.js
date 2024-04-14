@@ -33,6 +33,7 @@ const menuItems = [
     { name: 'Water', price: '$1.99', image: '../Images/Menu photo/water.jpg', category: 'Drinks'},
 ];  // Item name, price, descrption, image, and category
 
+
 const cart = [];
 document.addEventListener('DOMContentLoaded', function() {
     const menuContainer = document.getElementById('menu-items');
@@ -70,7 +71,14 @@ document.addEventListener('DOMContentLoaded', function() {
         // Create a button to add the item to the cart
         const addButton = document.createElement('button');
         addButton.textContent = 'Add to Cart';
-        addButton.addEventListener('click', () => addToCart(item));
+        addButton.addEventListener('click', () => {
+            const quantityInput = menuItem.querySelector('input[type="number"]');
+            if (quantityInput) {
+                addToCart(item, quantityInput);
+            } else {
+                alert('Quantity input not found.');
+            }
+        });
         menuItem.appendChild(addButton);
 
         const addButton1 = document.createElement('button');
@@ -94,42 +102,37 @@ document.addEventListener('DOMContentLoaded', function() {
        
     });
     
-    function addToCart(item, quantityInput) {
-        const menuItem = menuItems
-        const quantity = parseInt(quantityInput.value);
-        if (quantity > 0) {
-            const cartItem = {
-                name: item.name,
-                description: item.description,
-                price: item.price,
-                quantity: quantity
-            };
-            addButton.addEventListener('click', () => {
-                const quantityInput = menuItem.querySelector('input[type="number"]');
-                addToCart(item, quantityInput);
-            });
-            alert(`Added ${quantity} ${item.name} for $${(item.price.replace('$', '') * quantity).toFixed(2)} to cart!`);
-
-            updateCart(cartItem);
-        } else {
-            alert('Please enter a valid quantity greater than zero.');
-        }
-    }
-
     function updateCartUI() {
-        cartItemCountSpan.textContent = cart.length;
-        cartItemsList.innerHTML = '';
+        cartItemCountSpan.textContent = cart.length; // Update the cart item count display
+    
+        cartItemsList.innerHTML = ''; // Clear the cart items list before updating
+    
         let totalCost = 0;
+    
+        // Loop through each item in the cart
         cart.forEach(item => {
+            // Create a list item element to display the cart item
             const cartItemElement = document.createElement('li');
-            cartItemElement.textContent = `${item.name} - ${item.price}`;
-            cartItemsList.appendChild(cartItemElement);
-            totalCost += parseFloat(item.price.replace('$', ''));
-        });
+            
+            const totalPriceForItem = parseFloat(item.price.replace('$', '')) * item.quantity;
 
+        // Display the item name, quantity, and total price in the cart UI
+            cartItemElement.textContent = `${item.name} - Quantity: ${item.quantity} - Total: $${totalPriceForItem.toFixed(2)}`
+            // Display the item name and quantity
+            
+            // Append the cart item to the cart items list
+            cartItemsList.appendChild(cartItemElement);
+
+    
+            // Calculate the total cost by multiplying item price by quantity and adding it to the total
+            totalCost += totalPriceForItem;
+        });
+    
+        // Display the total cost at the end of the cart items list
         const totalElement = document.createElement('li');
         totalElement.textContent = `Total Cost: $${totalCost.toFixed(2)}`;
         cartItemsList.appendChild(totalElement);
+        localStorage.setItem('cart', JSON.stringify(cart));
     }
 
     function removeFromCart(itemToRemove) {
@@ -140,5 +143,36 @@ document.addEventListener('DOMContentLoaded', function() {
             updateCartUI(); // Update UI after removing item
             localStorage.setItem('cart', JSON.stringify(cart)); // Update localStorage
         }
+    }
+
+    function updateCart(cartItem) {
+        cart.push(cartItem);
+        updateCartUI();
+        localStorage.setItem('cart', JSON.stringify(cart));
+    }
+    function addToCart(item, quantityInput) {
+        const quantity = quantityInput.value.trim(); // Trim any whitespace
+        if (quantity === '') {
+            alert(`Please enter a quantity for ${item.name}.`);
+            return; // Exit the function if quantity is empty
+        }
+    
+        const quantityValue = parseInt(quantity);
+        if (!isNaN(quantityValue) && quantityValue > 0) {
+            const cartItem = {
+                name: item.name,
+                description: item.description,
+                price: item.price,
+                quantity: quantityValue
+            };
+            alert(`Added ${quantityValue} ${item.name} for $${(item.price.replace('$', '') * quantityValue).toFixed(2)} to cart!`);
+            
+            updateCart(cartItem);
+            updateCartUI(cartItem);
+            
+        } else {
+            alert('Please enter a valid quantity greater than zero.');
+        }
+    
     }
 });
