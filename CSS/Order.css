@@ -85,3 +85,20 @@ li:last-child{
     align-items: center;
     text-align: center;
 }   
+
+form{
+    display: flex;
+    flex-direction: column;
+    max-width: 300px;
+    margin-left: 20px;
+    margin-bottom: 50px;
+}
+label{
+    margin-bottom: 8px;
+}
+input{
+    padding: 8px;
+    margin-bottom: 16px;
+    border-radius: 60px 60px 60px 60px;
+    border-color: red;
+}
