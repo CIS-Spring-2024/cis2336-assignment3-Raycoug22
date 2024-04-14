@@ -27,9 +27,15 @@ document.addEventListener('DOMContentLoaded', function() {
             quantityInput.min = 1;
             quantityInput.value = item.quantity;
             quantityInput.addEventListener('change', () => {
-                item.quantity = parseInt(quantityInput.value);
-                updateCartUI(); // Update UI after quantity change
-                localStorage.setItem('cart', JSON.stringify(cart)); // Update localStorage
+                const newQuantity = parseInt(quantityInput.value);
+                if (!isNaN(newQuantity) && newQuantity > 0) {
+                    item.quantity = newQuantity;
+                    updateCartUI(); // Update UI after quantity change
+                    localStorage.setItem('cart', JSON.stringify(cart)); // Update localStorage
+                } else {
+                    alert('Quantity must be a valid number greater than zero.');
+                    quantityInput.value = item.quantity; // Reset quantity input value
+                }
             });
 
             const totalLabel = document.createElement('span');
@@ -73,40 +79,54 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Call the updateCartUI function to initially display the order items
     updateCartUI();
-    
-});
 
-document.querySelector('form'). addEventListener('focusin', function(event){
-    if(event.target.tagName === 'INPUT' || event.target.tagName === "TEXTAREA"){
-        event.target.style.backgroundColor = 'lightblue';
-    }
-});
+    // Add event listener for form submission
+    document.querySelector('form').addEventListener('submit', function(event) {
+        event.preventDefault(); // Prevent the default form submission behavior
+        
+        const form = event.target;
+        let isFormValid = true;
 
-document.querySelector('form'). addEventListener('focusout', function(event){
-    if(event.target.tagName === 'INPUT' || event.target.tagName === "TEXTAREA"){
-        event.target.style.backgroundColor = '';
-    }
-});
+        // Check if any input field is empty
+        form.querySelectorAll('input, textarea').forEach(field => {
+            if (field.value.trim() === '') {
+                isFormValid = false;
+                alert('Name, Email, and Phone fields cannot be left blank.');
+            }
+        });
 
-document.querySelector('form'). addEventListener('focusout', function(event){
-    if(event.target.tagName === 'INPUT' || event.target.tagName === "TEXTAREA"){
-        if(event.target.value.trim()===''){
-            alert('Form fields cannot be left blank')
+        // Check if any quantity input field is blank or less than or equal to zero
+        form.querySelectorAll('input[type="number"]').forEach(quantityField => {
+            const quantity = parseInt(quantityField.value);
+            if (isNaN(quantity) || quantity <= 0) {
+                isFormValid = false;
+                alert('Quantity must be a valid number greater than zero.');
+            }
+        });
+
+        // Proceed with form submission if form is valid
+        if (isFormValid) {
+            alert('Thank you for your order! We will contact you shortly if anything comes up with your order.');
+            form.reset(); // Optionally, reset the form after successful submission
         }
-   
-    }
-});
+    });
 
-form.querySelectorAll('input[type="number"]').forEach(quantityField => {
-    const quantity = parseInt(quantityField.value);
-    if (isNaN(quantity) || quantity <= 0) {
-        isFormValid = false;
-        alert('Quantity must be a valid number greater than zero.');
-    }
-});
+    // Add event listener for input focus
+    document.querySelector('form').addEventListener('focusin', function(event) {
+        if (event.target.tagName === 'INPUT' || event.target.tagName === 'TEXTAREA') {
+            event.target.style.backgroundColor = 'lightblue';
+        }
+    });
 
-// Prevent form submission if form is not valid
-if (!isFormValid) {
-    event.preventDefault();
-}
+    // Add event listener for input blur
+    document.querySelector('form').addEventListener('focusout', function(event) {
+        if (event.target.tagName === 'INPUT' || event.target.tagName === 'TEXTAREA') {
+            event.target.style.backgroundColor = '';
+        }
+    });
+
+    // Add event listener for the "Submit form" button
+    document.querySelector('button[type="submit"]').addEventListener('click', function(event) {
+        document.querySelector('form').dispatchEvent(new Event('submit'));
+    });
 });
