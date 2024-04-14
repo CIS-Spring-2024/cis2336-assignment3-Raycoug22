@@ -138,4 +138,19 @@ h2{
 #cart-icon{
     float: right;
     margin-right: -440px;
+    text-decoration: none;
+}
+.menu-item button{
+    margin-top: 15px;
+    margin-bottom: 15px;
+    width: fit-content;
+    align-self:center;
+}
+#cart-item-count{
+    background-color: #ff6347;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 50%;
+    text-decoration: none;
+    margin-left: -10px;
 }

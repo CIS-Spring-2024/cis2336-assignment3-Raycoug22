@@ -84,6 +84,8 @@ li:last-child{
     justify-content: space-between;
     align-items: center;
     text-align: center;
+    border: 1px solid #ccc;
+    border-radius: 5px;
 }   
 
 form{
@@ -101,4 +103,18 @@ input{
     margin-bottom: 16px;
     border-radius: 60px 60px 60px 60px;
     border-color: red;
+}
+.order-item span{
+    flex: 1;
+}
+
+.order-item input[type="number"] {
+    width: 60px;
+    margin-left: 30px;
+}
+form{
+    margin-top: 60px;
+}
+.btn{
+    font-size: 24px;
 }

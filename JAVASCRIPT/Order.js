@@ -8,6 +8,7 @@ document.addEventListener('DOMContentLoaded', function() {
         
         let totalCost = 0;
 
+
         // Iterate over each item in the cart
         cart.forEach(item => {
             const orderItemElement = document.createElement('li');
@@ -64,6 +65,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // Display the total cost of all items in the cart on the order page
         const totalElement = document.createElement('li');
+        totalElement.classList.add('total')
         totalElement.textContent = `Total Cost: $${totalCost.toFixed(2)}`;
         orderItemsList.appendChild(totalElement);
     }
@@ -83,15 +85,22 @@ document.addEventListener('DOMContentLoaded', function() {
     // Add event listener for form submission
     document.querySelector('form').addEventListener('submit', function(event) {
         event.preventDefault(); // Prevent the default form submission behavior
+
+          // Check if the cart is empty
+          if (cart.length === 0) {
+            alert('Your shopping cart is empty. Please add items before submitting your order.');
+            return; // Exit the function early if the cart is empty
+        }
         
         const form = event.target;
         let isFormValid = true;
 
         // Check if any input field is empty
         form.querySelectorAll('input, textarea').forEach(field => {
+            const label = document.querySelector(`label[for="${field.id}"]`);
             if (field.value.trim() === '') {
                 isFormValid = false;
-                alert('Name, Email, and Phone fields cannot be left blank.');
+                alert(`${label.textContent} field cannot be left blank.`);
             }
         });
 
@@ -130,3 +139,4 @@ document.addEventListener('DOMContentLoaded', function() {
         document.querySelector('form').dispatchEvent(new Event('submit'));
     });
 });
+

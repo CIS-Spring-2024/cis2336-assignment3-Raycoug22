@@ -108,6 +108,7 @@ document.addEventListener('DOMContentLoaded', function() {
         cartItemsList.innerHTML = ''; // Clear the cart items list before updating
     
         let totalCost = 0;
+        let totalQuantity = 0;
     
         // Loop through each item in the cart
         cart.forEach(item => {
@@ -115,11 +116,9 @@ document.addEventListener('DOMContentLoaded', function() {
             const cartItemElement = document.createElement('li');
             
             const totalPriceForItem = parseFloat(item.price.replace('$', '')) * item.quantity;
+            totalQuantity += item.quantity
 
-        // Display the item name, quantity, and total price in the cart UI
-            cartItemElement.textContent = `${item.name} - Quantity: ${item.quantity} - Total: $${totalPriceForItem.toFixed(2)}`
-            // Display the item name and quantity
-            
+       
             // Append the cart item to the cart items list
             cartItemsList.appendChild(cartItemElement);
 
@@ -127,10 +126,10 @@ document.addEventListener('DOMContentLoaded', function() {
             // Calculate the total cost by multiplying item price by quantity and adding it to the total
             totalCost += totalPriceForItem;
         });
+        cartItemCountSpan.textContent = totalQuantity;
     
         // Display the total cost at the end of the cart items list
         const totalElement = document.createElement('li');
-        totalElement.textContent = `Total Cost: $${totalCost.toFixed(2)}`;
         cartItemsList.appendChild(totalElement);
         localStorage.setItem('cart', JSON.stringify(cart));
     }
